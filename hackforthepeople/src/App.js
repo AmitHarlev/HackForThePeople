@@ -1,8 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import db from './firebase'
 
 function App() {
+
+  db.collection("users").add({
+    displayName: "Amit Harlev",
+  });
 
   return (
     <div className="App">
