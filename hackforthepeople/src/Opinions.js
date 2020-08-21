@@ -6,6 +6,7 @@ import { setUserOpinions } from './firebase';
 
 const Opinions = (props) => {
     const { user } = props;
+    // TODO: get initial values from firestore if they exist
     const [abortion, setAbortion] = useState(50);
     const [gunControl, setGunControl] = useState(50);
 
