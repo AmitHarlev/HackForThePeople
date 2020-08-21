@@ -18,22 +18,35 @@ const provider = new firebase.auth.GoogleAuthProvider();
 export const db = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
 export const signInWithGoogle = () => {
-  auth.signInWithRedirect(provider).then(function(result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    console.log("banana");
-    console.log(user);
-    // ...
+  auth.signInWithPopup(provider).then(function(result) {
+
+    const user = result.user;
+    const usersRef = db.collection('users');
+
+    usersRef.doc(user.uid).get()
+      .then(
+        (doc) => {
+          if (!doc.exists) {
+            usersRef.doc(user.uid).set({
+              name: user.displayName,
+              ratings: [{
+                uid: "Ilona Kariko",
+                rating: 1
+              }, {
+                uid: "Ingrid Tsang",
+                rating: 4
+              }]
+            })
+          }
+        }
+      )
+      .catch(
+        (err) => {
+          console.log("error: "+ err);
+        }
+      )
+
   }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
+    console.log(error.message)
   });
 };

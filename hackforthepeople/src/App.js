@@ -1,15 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { db, signInWithGoogle, auth } from './firebase';
+import { signInWithGoogle, auth } from './firebase';
 
 function App() {
 
-  db.collection("users").add({
-    displayName: "Amit Harlev",
-  });
-
-  let user = auth.currentUser;
+  // db.collection("users").add({
+  //   displayName: "Amit Harlev",
+  // });
 
   return (
     <div>
