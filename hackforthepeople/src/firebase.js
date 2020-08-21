@@ -17,6 +17,16 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 export const db = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
+
+export const getCurrentUser = () => {
+  return auth.currentUser | undefined;
+}
+
+export const signOut = () => {
+  // TODO: catch promise
+  auth.signOut();
+}
+
 export const signInWithGoogle = () => {
   auth.signInWithPopup(provider).then(function(result) {
 
