@@ -19,12 +19,21 @@ export const db = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
 
 export const getCurrentUser = () => {
-  return auth.currentUser | undefined;
+  return auth.currentUser;
 }
 
 export const signOut = () => {
   // TODO: catch promise
   auth.signOut();
+}
+
+export const setUserOpinions = (opinions) => {
+  const user = getCurrentUser();
+  opinions.forEach(opinion => {
+    db.collection('users').doc(user.uid).collection('opinions').doc(opinion.name).set({
+      value: opinion.value
+    })
+  });
 }
 
 export const signInWithGoogle = () => {

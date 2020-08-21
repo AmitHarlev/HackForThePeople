@@ -1,11 +1,10 @@
 import React from 'react'
 import { Navbar, Button } from 'react-bootstrap';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { signInWithGoogle, signOut, auth} from './firebase'
+import { signInWithGoogle, signOut} from './firebase'
 
 
-const HeaderBar = () => {
-    const [user, loading, error] = useAuthState(auth);
+const HeaderBar = (props) => {
+    const { user } = props;
 
     return (
         <Navbar bg="dark" variant="dark">

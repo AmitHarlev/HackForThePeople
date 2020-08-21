@@ -1,13 +1,19 @@
 import React from 'react';
 import './App.css';
-import HeaderBar from './HeaderBar'
-import { signInWithGoogle, auth } from './firebase';
+import HeaderBar from './HeaderBar';
+import Opinions from './Opinions';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
 
 function App() {
+  const [user, loading, error] = useAuthState(auth);
+
 
   return (
+
     <div>
-      <HeaderBar />
+      <HeaderBar user={user} />
+      {user ? <Opinions user={user} /> : <div />}
     </div>
   );
 }
