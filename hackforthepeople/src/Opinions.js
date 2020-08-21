@@ -37,7 +37,7 @@ const Opinions = (props) => {
             <Form.Label>Abortion</Form.Label>
             <Form.Control ref={abortionSliderInput} value={abortion} onChange={() => {setAbortion(abortionSliderInput.current.value)}} type="range" />
         </Form.Group>
-        <Button onClick={setUserOpinionsEvent} variant="primary" type="button">
+        <Button onClick={setUserOpinionsEvent} variant="primary">
             Submit
         </Button>
     </Form>
