@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function PrivateRoute({ component: Component, authenticated, ...rest }) {
+const PrivateRoute = ({ component: Component, authenticated, ...rest }) => {
     return (
         <Route
             {...rest}
@@ -13,7 +13,7 @@ export function PrivateRoute({ component: Component, authenticated, ...rest }) {
 }
 
 // TODO: redirect if already completed survey
-export function SurveyRoute({ component: Component, authenticated, ...rest }) {
+const SurveyRoute = ({ component: Component, authenticated, ...rest }) => {
     return (
         <Route
             {...rest}
@@ -24,3 +24,5 @@ export function SurveyRoute({ component: Component, authenticated, ...rest }) {
         />
     );
 }
+
+export default { PrivateRoute, SurveyRoute };
