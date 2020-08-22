@@ -11,8 +11,8 @@ const NewUserPrompt = ({user}) => {
     if (loading) {
         return (<div/>)
     }
-
-    const FirstTimeSurveyPrompt = !!userDoc && !!userDoc.data().completedSurvey
+    
+    const FirstTimeSurveyPrompt = !!userDoc && !!userDoc.data() && !userDoc.data().completedSurvey
         ? <NewUserSurveyPrompt />
         : <div />
 

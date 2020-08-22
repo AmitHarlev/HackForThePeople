@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
 import { db } from './../firebase';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
-const Matcher = (props) => {
-
-    const { user } = props;
+const Matcher = ({user}) => {
 
     const [userDoc, loading, error] = useDocumentOnce(
         db.collection('users').doc(user.uid),
     );
 
     const topicRef = React.createRef();
+    const lowerBoundRef = React.createRef();
+    const upperBoundRef = React.createRef();
+
+    const [lowerBound, setLowerBound] = useState(0);
+    const [upperBound, setUpperBound] = useState(100);
 
     const findMatches = () => {
         // TODO: IT IS CURRENTLY ARBITRARILY GREATER THAN!!!
@@ -34,6 +37,12 @@ const Matcher = (props) => {
                 <option>Abortion</option>
             </Form.Control>
         </Form.Group>
+        <Form.Group controlId="range">
+            <Form.Label>Range</Form.Label>
+            <Form.Control ref={lowerBoundRef} value={lowerBound} onChange={() => {setLowerBound(lowerBoundRef.current.value)}} type="range" />
+            <Form.Control ref={upperBoundRef} value={upperBound} onChange={() => {setUpperBound(upperBoundRef.current.value)}} type="range" />
+        </Form.Group>
+              
         <Button onClick={findMatches} variant="primary">
             Match!
         </Button>

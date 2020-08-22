@@ -4,7 +4,7 @@ import NewUserPrompt from '../components/NewUserPrompt';
 const Home = ({user}) => {
     return (
         <div>
-            <NewUserPrompt user={user} />
+            {!!user ? <NewUserPrompt user={user} /> : <div/>}
         </div>
     )
 }
