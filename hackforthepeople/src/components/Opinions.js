@@ -16,8 +16,8 @@ const Opinions = (props) => {
 
     useEffect(() => {
         if (!!userDoc) {
-            setAbortion(userDoc.data()['Abortion']);
-            setGunControl(userDoc.data()['Gun Control'])
+            setAbortion(userDoc.data()['Abortion'] || abortion);
+            setGunControl(userDoc.data()['Gun Control'] || gunControl)
         }
     }, [userDoc])
 
