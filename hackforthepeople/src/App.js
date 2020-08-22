@@ -5,10 +5,14 @@ import { auth } from './firebase';
 
 import './App.css';
 import HeaderBar from './components/HeaderBar';
+<<<<<<< HEAD
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
 import { PrivateRoute } from './components/Routes';
+=======
+import { PrivateRoute, SurveyRoute } from './components/Routes';
+>>>>>>> initial chat box
 import Home from './pages/Home';
 import Survey from './pages/Survey';
 import Matches from './pages/Matches';
@@ -22,7 +26,6 @@ function App() {
   }
   
   return (
-
     <div>
       <HeaderBar user={user} />
       

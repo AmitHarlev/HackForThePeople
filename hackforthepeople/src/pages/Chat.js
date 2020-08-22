@@ -1,11 +1,11 @@
 import React from 'react'
+import ChatBox from './../components/ChatBox';
 
-const Chat = () => {
+const Chat = ({ user }) => {
+
     return (
-        <div>
-            
-        </div>
+        <ChatBox user={user} />
     )
 }
 
-export default Chat
+export default Chat;
