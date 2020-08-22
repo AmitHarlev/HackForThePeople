@@ -16,7 +16,7 @@ function App() {
       <HeaderBar user={user} />
       {user ? <div>
           <Opinions user={user} />
-          <Matcher />
+          <Matcher user={user}/>
         </div> : <div />}
     </div>
   );
