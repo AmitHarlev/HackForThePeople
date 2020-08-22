@@ -10,7 +10,7 @@ const firebaseConfig = {
     storageBucket: "hack-for-the-people.appspot.com",
     messagingSenderId: "591486962519",
     appId: "1:591486962519:web:d0dc7ba2cbb582388c8c12"
-  };
+};
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const provider = new firebase.auth.GoogleAuthProvider();

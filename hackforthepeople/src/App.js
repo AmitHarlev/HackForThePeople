@@ -18,13 +18,13 @@ function App() {
 
     <div>
       <HeaderBar user={user} />
-      {user ? <Opinions user={user} /> : <div />}
+      {user ? <div><Opinions user={user} /><Matcher user={user}/></div> : <div />}
 
       <Router>
         <Switch>
           <Route exact path="/" component={Home}></Route>
           <SurveyRoute path="/survey" component={Survey}></SurveyRoute>
-          <PrivateRoute path="/chat" authenticated={user} component={Chat}></PrivateRoute>
+          <PrivateRoute path="/chat" authenticated={user} loading={loading} component={Chat}></PrivateRoute>
         </Switch>
       </Router>
     </div>
