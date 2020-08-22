@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Button } from 'react-bootstrap';
-import { signInWithGoogle, signOut} from './firebase'
+import { signInWithGoogle, signOut} from '../firebase'
 
 
 const HeaderBar = (props) => {
@@ -12,7 +12,7 @@ const HeaderBar = (props) => {
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                    {!user ? <Button variant="outline-info" onClick={signInWithGoogle}>Log In</Button>: <span>Signed in as: <a href="#login">{user.displayName}</a> <Button variant="outline-info" onClick={signOut}>Sign out</Button></span>}
+                    {!user ? <Button variant="outline-info" onClick={signInWithGoogle}>Log In with Google</Button>: <span>Signed in as: <a href="#login">{user.displayName}</a> <Button variant="outline-info" onClick={signOut}>Sign out</Button></span>}
                 </Navbar.Text>
             </Navbar.Collapse>
         </Navbar>
