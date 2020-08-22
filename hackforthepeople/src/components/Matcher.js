@@ -18,9 +18,7 @@ const Matcher = ({user}) => {
 
     const findMatches = () => {
         // TODO: IT IS CURRENTLY ARBITRARILY GREATER THAN!!!
-        console.log(userDoc.data());
-        console.log(topicRef.current.value);
-        const matchedUsers = db.collection('users').where(topicRef.current.value, '>=', userDoc.data()[topicRef.current.value]);
+        const matchedUsers = db.collection('users').where(topicRef.current.value, '>=', lowerBound).where(topicRef.current.value, '<=', upperBound);
         matchedUsers.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 console.log(doc.id, " => ", doc.data());
