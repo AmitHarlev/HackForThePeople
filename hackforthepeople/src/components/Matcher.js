@@ -5,6 +5,8 @@ import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 const Matcher = ({user}) => {
 
+    const [matches, setMatches] = useState([]);
+
     const [userDoc, loading, error] = useDocumentOnce(
         db.collection('users').doc(user.uid),
     );
@@ -17,34 +19,51 @@ const Matcher = ({user}) => {
     const [upperBound, setUpperBound] = useState(100);
 
     const findMatches = () => {
-        // TODO: IT IS CURRENTLY ARBITRARILY GREATER THAN!!!
         const matchedUsers = db.collection('users').where(topicRef.current.value, '>=', lowerBound).where(topicRef.current.value, '<=', upperBound);
         matchedUsers.get().then(function(querySnapshot) {
+            const matchesFound=[];
             querySnapshot.forEach(function(doc) {
-                console.log(doc.id, " => ", doc.data());
+                matchesFound.push({
+                    id: doc.id,
+                    data: doc.data()
+                })
             });
+            setMatches(matchesFound);
         });
     }
 
     return (
-    <Form>
-        <Form.Group controlId="topic">
-            <Form.Label>Topic to Match On</Form.Label>
-            <Form.Control ref={topicRef} as="select" custom>
-                <option>Gun Control</option>
-                <option>Abortion</option>
-            </Form.Control>
-        </Form.Group>
-        <Form.Group controlId="range">
-            <Form.Label>Range</Form.Label>
-            <Form.Control ref={lowerBoundRef} value={lowerBound} onChange={() => {setLowerBound(lowerBoundRef.current.value)}} type="range" />
-            <Form.Control ref={upperBoundRef} value={upperBound} onChange={() => {setUpperBound(upperBoundRef.current.value)}} type="range" />
-        </Form.Group>
-              
-        <Button onClick={findMatches} variant="primary">
-            Match!
-        </Button>
-    </Form>
+        <>
+        {matches.length===0 ?
+        <Form>
+            <Form.Group controlId="topic">
+                <Form.Label>Topic to Match On</Form.Label>
+                <Form.Control ref={topicRef} as="select" custom>
+                    <option>Gun Control</option>
+                    <option>Abortion</option>
+                </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="range">
+                <Form.Label>Range</Form.Label>
+                <Form.Control ref={lowerBoundRef} value={lowerBound} onChange={() => {setLowerBound(lowerBoundRef.current.value)}} type="range" />
+                <Form.Control ref={upperBoundRef} value={upperBound} onChange={() => {setUpperBound(upperBoundRef.current.value)}} type="range" />
+            </Form.Group>
+                
+            <Button onClick={findMatches} variant="primary">
+                Match!
+            </Button>
+        </Form>
+        :
+        <>
+            <h2>Matches</h2>
+            <ul>
+                { matches.map((match) => {
+                return <li>{match.data.name} <Button onClick={() => alert("Sent!")}>Send Conversation Request</Button></li>
+                }) }
+            </ul>
+        </>
+        }
+        </>
     )
 }
 
