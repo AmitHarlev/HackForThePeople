@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { setUserOpinions, db } from './firebase';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
