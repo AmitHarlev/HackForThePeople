@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { db } from './../firebase';
-import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useDocumentOnce, useDocument } from 'react-firebase-hooks/firestore';
 import NewUserSurveyPrompt from './NewUserSurveyPrompt';
 
 const NewUserPrompt = ({user}) => {
-    const [userDoc, loading, error] = useDocumentOnce(
+    const [userDoc, loading, error] = useDocument(
         db.collection('users').doc(user.uid),
     );
 

@@ -16,6 +16,7 @@ function App() {
   if (loading) {
     return <HeaderBar user={user} />;
   }
+  
   return (
 
     <div>
