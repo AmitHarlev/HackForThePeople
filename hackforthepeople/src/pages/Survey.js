@@ -2,11 +2,9 @@ import React from 'react';
 import Opinions from './../components/Opinions';
 
 
-const Survey = () => {
+const Survey = ({ user }) => {
     return (
-        <div>
-            
-        </div>
+        <Opinions user={user} />
     )
 }
 
