@@ -1,30 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import { addChatMessage, db, addChatRating } from './../firebase';
 import './ChatBox.css';
 
-const ChatBox = ({ user }) => {
+const ChatBox = ({ user, meetingId }) => {
 
-    const [meetingId, setMeetingId] = useState('');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
     const chatRef = React.createRef();
 
-    const [userDoc, userLoading, userError] = useDocumentOnce(
-        db.collection('users').doc(user.uid)
-    );
-
-    useEffect(() => {
-        if (!!userDoc) {
-            setMeetingId(userDoc.data()['currentMeeting']);
-        }
-    }, [userDoc])
-
-    // TODO: change to meetingId
-    // TODO: update immediately
-    const [meetingDoc, meetingLoading, meetingError] = useDocumentOnce(
-        db.collection('meetings').doc("hApVQp4xLfKbmuoP20Py")
+    const [meetingDoc, meetingLoading, meetingError] = useDocument(
+        db.collection('meetings').doc(meetingId)
     );
 
     useEffect(() => {
@@ -42,9 +29,11 @@ const ChatBox = ({ user }) => {
     }
 
     const handleSendMsg = (event) => {
+        const chatArea = chatRef.current;
         event.preventDefault();
         addChatMessage(meetingId, Date.now(), newMessage);
         setNewMessage('');
+        chatArea.scrollBy(0, chatArea.innerHeight); // TODO: not working
     }
 
     const formatTime = (timestamp) => {
@@ -67,7 +56,7 @@ const ChatBox = ({ user }) => {
 
             <form onSubmit={handleSendMsg}>
                 <input onChange={handleChange} value={newMessage}></input>
-                <button type="Send">Send</button>
+                <button>Send</button>
             </form>
         </div>
     );
