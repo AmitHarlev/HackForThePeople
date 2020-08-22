@@ -29,7 +29,11 @@ export const signOut = () => {
 
 export const setUserOpinions = (opinions) => {
   const user = getCurrentUser();
-  db.collection('users').doc(user.uid).update(opinions)
+  let opinions_and_completed_survey_bool = {
+    completedSurvey: true,
+    ...opinions
+  }
+  db.collection('users').doc(user.uid).update(opinions_and_completed_survey_bool)
 }
 
 export const signInWithGoogle = () => {
@@ -44,6 +48,7 @@ export const signInWithGoogle = () => {
           if (!doc.exists) {
             usersRef.doc(user.uid).set({
               name: user.displayName,
+              completedSurvey: false,
               ratings: [{
                 uid: "Ilona Kariko",
                 rating: 1
@@ -51,7 +56,7 @@ export const signInWithGoogle = () => {
                 uid: "Ingrid Tsang",
                 rating: 4
               }]
-            })
+            });
           }
         }
       )
