@@ -40,7 +40,10 @@ export const setUserOpinions = (opinions) => {
 export const sendConversationRequest = ({id, data}) => {
   const user = getCurrentUser();
   db.collection('users').doc(id).update({
-    requests: firebase.firestore.FieldValue.arrayUnion(user.uid)
+    requests: firebase.firestore.FieldValue.arrayUnion(user.uid),
+  });
+  db.collection('users').doc(user.uid).update({
+    requestsSent: firebase.firestore.FieldValue.arrayUnion(id),
   });
 }
 
@@ -58,6 +61,7 @@ export const signInWithGoogle = () => {
               name: user.displayName,
               completedSurvey: false,
               requests:[],
+              requestsSent:[],
               ratings: [{
                 uid: "Ilona Kariko",
                 rating: 1
