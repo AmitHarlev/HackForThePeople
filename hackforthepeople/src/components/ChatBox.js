@@ -4,7 +4,7 @@ import { addChatMessage, db, addChatRating } from './../firebase';
 import './ChatBox.css';
 import { Form, Button } from 'react-bootstrap';
 
-const ChatBox = ({ user }) => {
+const ChatBox = ({ user, meetingId }) => {
 
     const [meetingId, setMeetingId] = useState('');
 

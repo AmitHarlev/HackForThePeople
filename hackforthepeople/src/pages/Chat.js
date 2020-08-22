@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { db } from './../firebase';
