@@ -29,11 +29,7 @@ export const signOut = () => {
 
 export const setUserOpinions = (opinions) => {
   const user = getCurrentUser();
-  opinions.forEach(opinion => {
-    db.collection('users').doc(user.uid).collection('opinions').doc(opinion.name).set({
-      value: opinion.value
-    })
-  });
+  db.collection('users').doc(user.uid).update(opinions)
 }
 
 export const signInWithGoogle = () => {

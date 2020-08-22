@@ -1,29 +1,36 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { setUserOpinions } from './firebase';
+import { setUserOpinions, db } from './firebase';
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 
 const Opinions = (props) => {
     const { user } = props;
-    // TODO: get initial values from firestore if they exist
+
+    const [userDoc, loading, error] = useDocumentOnce(
+        db.collection('users').doc(user.uid),
+    );
+
     const [abortion, setAbortion] = useState(50);
     const [gunControl, setGunControl] = useState(50);
+
+    useEffect(() => {
+        if (!!userDoc) {
+            setAbortion(userDoc.data()['Abortion']);
+            setGunControl(userDoc.data()['Gun Control'])
+        }
+    }, [userDoc])
 
     const gunControlSliderInput = React.createRef(); 
     const abortionSliderInput = React.createRef(); 
 
     const setUserOpinionsEvent = () => {
-        const opinions = [
+        const opinions =
             {
-                name: "Gun Control",
-                value: gunControl
-            },
-            {
-                name: "Abortion",
-                value: abortion
-            }
-        ]
+                "Gun Control": gunControl,
+                "Abortion": abortion
+            };
         setUserOpinions(opinions);
     }
 
