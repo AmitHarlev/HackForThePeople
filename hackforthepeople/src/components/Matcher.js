@@ -1,9 +1,7 @@
 import React from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { db } from '../firebase';
+import { db } from './../firebase';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
-
-
 
 const Matcher = (props) => {
 
