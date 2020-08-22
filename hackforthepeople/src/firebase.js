@@ -36,6 +36,14 @@ export const setUserOpinions = (opinions) => {
   db.collection('users').doc(user.uid).update(opinions_and_completed_survey_bool)
 }
 
+// Takes the user the request was sent to as argument
+export const sendConversationRequest = ({id, data}) => {
+  const user = getCurrentUser();
+  db.collection('users').doc(id).update({
+    requests: firebase.firestore.FieldValue.arrayUnion(user.uid)
+  });
+}
+
 export const signInWithGoogle = () => {
   auth.signInWithPopup(provider).then(function(result) {
 
@@ -49,6 +57,7 @@ export const signInWithGoogle = () => {
             usersRef.doc(user.uid).set({
               name: user.displayName,
               completedSurvey: false,
+              requests:[],
               ratings: [{
                 uid: "Ilona Kariko",
                 rating: 1

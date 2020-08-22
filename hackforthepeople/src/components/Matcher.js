@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { db } from './../firebase';
+import { db, sendConversationRequest } from './../firebase';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 const Matcher = ({user}) => {
@@ -23,14 +23,20 @@ const Matcher = ({user}) => {
         matchedUsers.get().then(function(querySnapshot) {
             const matchesFound=[];
             querySnapshot.forEach(function(doc) {
-                matchesFound.push({
-                    id: doc.id,
-                    data: doc.data()
-                })
+                if (doc.id !== user.uid) {
+                    matchesFound.push({
+                        id: doc.id,
+                        data: doc.data()
+                    })
+                }
             });
             setMatches(matchesFound);
         });
     }
+
+    const sendRequest = (selectedUser) => {
+        sendConversationRequest(selectedUser);
+    } 
 
     return (
         <>
@@ -58,7 +64,7 @@ const Matcher = ({user}) => {
             <h2>Matches</h2>
             <ul>
                 { matches.map((match) => {
-                return <li>{match.data.name} <Button onClick={() => alert("Sent!")}>Send Conversation Request</Button></li>
+                return <li key={match.id}>{match.data.name} <Button onClick={() => {sendRequest(match)}}>Send Conversation Request</Button></li>
                 }) }
             </ul>
         </>
