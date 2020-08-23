@@ -63,11 +63,11 @@ const Matcher = ({user}) => {
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="center">
-                            <Form.Label>Range</Form.Label>
+                            <Form.Label>Set your range:</Form.Label>
                             <Form.Control ref={rangeCenterRef} value={rangeCenter} onChange={() => {setRangeCenter(rangeCenterRef.current.value)}} type="range" />
                         </Form.Group>
                         <Form.Group controlId="radius">
-                            <Form.Label>Range Radius</Form.Label>
+                            <Form.Label>Set your range radius:</Form.Label>
                             <Form.Control ref={radiusRef} as="select" custom>
                                 <option>5</option>
                                 <option>10</option>
@@ -79,13 +79,13 @@ const Matcher = ({user}) => {
                             Match!
                         </Button>
                     </Form>
-                    {searchedForMatches ? <h2>No matches found! Try a different range.</h2> : <div/>}
+                    {/* {searchedForMatches ? <h2>No matches found! Try a different range.</h2> : <div/>} */}
                     </>
                     :
                     <>
                         <ul className="match-list">
                             { matches.map((match) => {
-                            return <li key={match.id}>{match.data.name} <Button onClick={() => {sendRequest(match)}}>Send Conversation Request</Button></li>
+                            return <li key={match.id}>{match.data.name} <Button onClick={() => {sendRequest(match)}} className="button-request">Send Conversation Request</Button></li>
                             }) }
                         </ul>
                     </>
