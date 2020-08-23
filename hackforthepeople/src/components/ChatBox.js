@@ -6,10 +6,13 @@ import Rating from 'react-rating';
 import { addChatMessage, db, endCurrentMeeting, addChatRating } from './../firebase';
 import './ChatBox.css';
 import './Popup.css';
+import './../index.css';
 
 const ChatBox = ({ user, meetingId }) => {
 
-    const [otherUserId, setOtherUserId] = useState([]);
+    console.log(user, meetingId);
+
+    const [otherUserId, setOtherUserId] = useState('');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -61,24 +64,32 @@ const ChatBox = ({ user, meetingId }) => {
     }
 
     return (
-        <div>
-            <div className="chat-area" ref={chatRef}>
-                {messages.map(msg => {
-                    return <p key={msg.timestamp} className={"chat-bubble " + (user.uid === msg.uid ? "current-user" : "")}>
-                        {msg.message}
-                        <br />
-                        <span className="chat-time float-right">{formatTime(msg.timestamp)}</span>
-                    </p>
-                })}
+        <div className="grid-container grid-background">
+            <div className="chat-grid-wrapper">
+                <div className="chat-heading">
+                    <span className="chat-name">You are chatting with Amit</span>
+                    <button className="btn btn-secondary button-end" onClick={handleEnd}>End Session</button>
+                </div>
+
+                <div className="chat-grid">
+                    <div className="chat-area" ref={chatRef}>
+                        {messages.map(msg => {
+                            return <p key={msg.timestamp} className={"chat-bubble " + (user.uid === msg.uid ? "current-user" : "")}>
+                                {msg.message}
+                                <br />
+                                <span className="chat-time float-right">{formatTime(msg.timestamp)}</span>
+                            </p>
+                        })}
+                    </div>
+
+                    <form onSubmit={handleSendMsg}>
+                        <input onChange={handleChange} value={newMessage} placeholder={"Type your message here"} className="chat-type" />
+                        <button className="btn btn-primary button-send">Send</button>
+                    </form>
+                </div>
+
+                <Popup />
             </div>
-
-            <form onSubmit={handleSendMsg}>
-                <input onChange={handleChange} value={newMessage}></input>
-                <button className="btn btn-primary">Send</button>
-            </form>
-
-            <button className="btn btn-secondary" onClick={handleEnd}>End Session</button>
-            <Popup />
         </div>
     );
 }

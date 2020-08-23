@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.header-brand {
+  margin: 0 20px;
+}
+
+.button {
+  color: #17b87e !important; 
+  border-color: #17b87e !important;
+}
+
+.button:hover {
+  color: white !important;
+  background-color: #17b87e !important;
+}
+
+.button-header {
+  margin: 0 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 100px 540px 540px 100px;
+  grid-template-rows: 555px;
+}
+
+.grid-background {
+  background-color: #ececec;
+}

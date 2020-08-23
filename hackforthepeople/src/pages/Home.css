@@ -1,0 +1,53 @@
+.home-middle-band {
+    height: 500px;
+    background-color: #cee5d5;
+}
+
+.home-heading {
+    /* text-align: right; */
+    font-size: 45px;
+}
+
+.home-text {
+    font-size: 20px;
+}
+
+.home-heading-grid {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    padding: 50px;
+}
+
+.home-text-grid {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 50px;
+    padding-top: 150px;
+}
+
+.button-home {
+    margin-top: 30px;
+    background-color: #17b87e !important;
+    border-color: #17b87e !important;
+    color: white !important;
+}
+
+.button-home:hover {
+    opacity: 0.8;
+}
+
+.home-img-grid {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 50px;
+    padding-top: 150px;
+}
+
+.home-img {
+    height: 300px;
+}
+
+.home-source {
+    font-size: 8px;
+    margin-top: 5px;
+}

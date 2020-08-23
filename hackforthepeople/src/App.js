@@ -33,8 +33,8 @@ function App() {
           {/* TODO: Don't pass loading in as prop here, taken care of loading above */}
           <PrivateRoute path="/survey" user={user} loading={loading} component={Survey} />
           <PrivateRoute path="/match" user={user} loading={loading} component={Match} />
-          <PrivateRoute path="/chat" user={user} loading={loading} component={Chat} />
           <PrivateRoute path="/requests" user={user} component={Requests} />
+          <PrivateRoute path="/chat" user={user} loading={loading} component={Chat} />
         </Switch>
       </Router>
     </div>

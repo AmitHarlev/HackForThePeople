@@ -7,7 +7,7 @@ import OutBoundRequests from '../components/OutBoundRequests';
 const Requests = ({user}) => {
     return (
         <div>
-            <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+            <Tabs defaultActiveKey="inbound" id="uncontrolled-tab-example">
                 <Tab eventKey="inbound" title="Inbound">
                     <InBoundRequests user={user}/>
                 </Tab>

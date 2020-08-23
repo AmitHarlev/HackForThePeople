@@ -2,6 +2,8 @@ import React from 'react';
 import { db, ignoreInboundRequest } from './../firebase';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { Button } from 'react-bootstrap';
+import './../index.css';
+import './Requests.css';
 
 const InBoundRequests = ({ user }) => {
     const [userDoc, loading, error] = useDocument(
@@ -18,14 +20,18 @@ const InBoundRequests = ({ user }) => {
     
 
     return (
-        <div>
-            <ul>
-            {
-                userDoc.data().requests.map((request) => {
-                return <li>{JSON.stringify(request)} <Button onClick={() => ignoreRequest(request)}> Ignore Request </Button></li>
-                })
-            }
-            </ul>
+        <div className="grid-container grid-background">
+            <div className="request-grid-wrapper">
+                <div className="request-area">
+                    <ul className="request-list">
+                    {
+                        userDoc.data().requests.map((request) => {
+                        return <li>{JSON.stringify(request)} <Button onClick={() => ignoreRequest(request)} className="button-request"> Ignore Request </Button></li>
+                        })
+                    }
+                    </ul>
+                </div>
+            </div>
         </div>
     )
 }

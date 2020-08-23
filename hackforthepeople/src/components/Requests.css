@@ -1,0 +1,24 @@
+.request-grid-wrapper {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    padding: 30px 50px;
+}
+
+.request-area {
+    overflow-y: scroll;
+    height: 400px;
+    margin: 10px 0;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.request-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.button-request {
+    float: right;
+}

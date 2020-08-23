@@ -18,11 +18,14 @@ const Chat = ({ user }) => {
         }
     }, [userDoc])
 
+    console.log(meetingId);
+
     if (meetingId !== '') {
         return <ChatBox user={user} meetingId={meetingId} />;
     }
     return (
-        <Redirect to="/match" />
+        // <Redirect to="/match" />
+        <></>
     );
 
     // return (
