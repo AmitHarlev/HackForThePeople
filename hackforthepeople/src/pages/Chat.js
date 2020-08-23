@@ -14,7 +14,6 @@ const Chat = ({ user }) => {
 
     useEffect(() => {
         if (!!userDoc) {
-            console.log("egg");
             setMeetingId(userDoc.data()['currentMeeting']);
         }
     }, [userDoc])

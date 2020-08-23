@@ -10,8 +10,6 @@ import './../index.css';
 
 const ChatBox = ({ user, meetingId }) => {
 
-    console.log(user, meetingId);
-
     const [otherUserId, setOtherUserId] = useState('');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');

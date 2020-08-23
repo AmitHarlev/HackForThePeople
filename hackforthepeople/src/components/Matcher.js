@@ -27,14 +27,13 @@ const Matcher = ({user}) => {
         const topic = topicRef.current.value;
         matchedUsers.get().then(function(querySnapshot) {
             const matchesFound=[];
-            debugger;
-            console.log(radius);
             querySnapshot.forEach(function(doc) {
                 if (doc.id !== user.uid) {
                     matchesFound.push({
                         id: doc.id,
                         data: doc.data(),
                         topic: topic,
+                        disabled: false,
                     })
                 }
             });
@@ -45,8 +44,18 @@ const Matcher = ({user}) => {
 
     const sendRequest = (selectedUser) => {
         sendConversationRequest(selectedUser);
+        const new_matches = [];
+        for (const match of matches) {
+            if (match === selectedUser) {
+                selectedUser.disabled = true;
+                new_matches.push(selectedUser);
+            } else {
+                new_matches.push(new_matches);
+            }
+        }
+        setMatches(new_matches)
     } 
-
+    console.log(matches);
     return (
         <div className="grid-container grid-background">
             <div className="matches-grid-wrapper">
@@ -85,7 +94,7 @@ const Matcher = ({user}) => {
                     <>
                         <ul className="match-list">
                             { matches.map((match) => {
-                            return <li key={match.id}>{match.data.name} <Button onClick={() => {sendRequest(match)}} className="button-request">Send Conversation Request</Button></li>
+                            return <li key={match.id}>{match.data.name} <Button disabled={match.disabled} onClick={() => {sendRequest(match)}}>Send Conversation Request</Button></li>
                             }) }
                         </ul>
                     </>
