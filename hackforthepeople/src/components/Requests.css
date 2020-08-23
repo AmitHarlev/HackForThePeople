@@ -19,6 +19,11 @@
     padding-left: 0;
 }
 
+.request-item {
+    margin-bottom: 40px;
+}
+
 .button-request {
     float: right;
+    margin-left: 10px;
 }

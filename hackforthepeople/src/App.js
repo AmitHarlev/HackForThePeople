@@ -10,7 +10,8 @@ import { PrivateRoute } from './components/Routes';
 import Home from './pages/Home';
 import Survey from './pages/Survey';
 import Match from './pages/Match';
-import Requests from './pages/Requests';
+import InBoundRequests from './components/InBoundRequests';
+import OutBoundRequests from './components/OutBoundRequests';
 import Chat from './pages/Chat';
 import Resources from './pages/Resources';
 
@@ -34,7 +35,9 @@ function App() {
           {/* TODO: Don't pass loading in as prop here, taken care of loading above */}
           <PrivateRoute path="/survey" user={user} loading={loading} component={Survey} />
           <PrivateRoute path="/match" user={user} loading={loading} component={Match} />
-          <PrivateRoute path="/requests" user={user} component={Requests} />
+          {/* <PrivateRoute path="/requests" user={user} component={Requests} /> */}
+          <PrivateRoute path="/requests-inbound" user={user} component={InBoundRequests} />
+          <PrivateRoute path="/requests-outbound" user={user} component={OutBoundRequests} />
           <PrivateRoute path="/chat" user={user} loading={loading} component={Chat} />
           <PrivateRoute path="/resources" user={user} component={Resources} />
         </Switch>
