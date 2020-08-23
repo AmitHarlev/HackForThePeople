@@ -47,10 +47,10 @@ export const sendConversationRequest = ({id, data, topic}) => {
   usersRef.doc(user.uid).get().then(doc => {
     const user_topic_value = doc.data()[topic];
     usersRef.doc(id).update({
-      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value, state:0}),
+      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value, rating:doc.data()['rating'], name: doc.data()['name'], state:0}),
     });
     usersRef.doc(user.uid).update({
-      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic], state:0}),
+      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic], rating:data['rating'], name: data['name'], state:0}),
     });
   }) 
 }
