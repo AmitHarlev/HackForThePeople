@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCeHaINilUoapZQrDfQP4SI-guU1QrFcdY",
@@ -149,13 +148,7 @@ export const signInWithGoogle = () => {
               requests:[],
               requestsSent:[],
               currentMeeting: '',
-              ratings: [{
-                uid: "Ilona Kariko",
-                rating: 1
-              }, {
-                uid: "Ingrid Tsang",
-                rating: 4
-              }]
+              ratings: []
             });
           }
         }

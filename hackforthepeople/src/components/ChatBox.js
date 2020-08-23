@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocument, useDocumentOnce } from 'react-firebase-hooks/firestore';
 import Popup from 'react-popup';
 import Rating from 'react-rating';
 import { addChatMessage, db, endCurrentMeeting, addChatRating } from './../firebase';
@@ -19,6 +19,28 @@ const ChatBox = ({ user, meetingId }) => {
         db.collection('meetings').doc(meetingId)
     );
 
+    const [userDoc] = useDocumentOnce(
+        db.collection("users").doc(user.uid)
+    )
+
+    useEffect(() => {
+        if (!!userDoc) {
+         const incomingRequests = userDoc.data()['requests'];
+         const outgoingRequests = userDoc.data()['requestsSent'];
+         for (const req of incomingRequests) {
+             if (req.state === 1) {
+                 setOtherUserId(req.user);
+             }
+         }
+         for (const req of outgoingRequests) {
+                if (req.state === 1) {
+                    setOtherUserId(req.user);
+                }
+            }
+        }
+       
+    }, [userDoc])
+    
     useEffect(() => {
         if (!!meetingDoc) {
             let msgs = [];
@@ -26,12 +48,6 @@ const ChatBox = ({ user, meetingId }) => {
                 msgs.push(msg);
             });
             setMessages(msgs);
-
-            meetingDoc.data()['ratings'].forEach((rating) => {
-                if (rating["uid"] !== user.uid) {
-                    setOtherUserId(rating["uid"]);
-                }
-            })
         }
     }, [meetingDoc]);
 
