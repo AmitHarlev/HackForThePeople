@@ -8,6 +8,7 @@ const HeaderBar = (props) => {
 
     return (
         <Navbar>
+            <img src={require("./favicon.png")} className="header-logo" />
             <Navbar.Brand href="/" className="header-brand">Politalks</Navbar.Brand>
             <Navbar.Toggle />
             {!user ? <div/> :

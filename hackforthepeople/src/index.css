@@ -12,8 +12,14 @@ code {
     monospace;
 }
 
+.header-logo {
+  height: 25px;
+  margin-left: 20px;
+  margin-right: 8px;
+}
+
 .header-brand {
-  margin: 0 20px;
+  margin-right: 20px;
 }
 
 .button {
