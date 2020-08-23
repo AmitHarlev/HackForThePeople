@@ -6,7 +6,7 @@ import ChatBox from './../components/ChatBox';
 
 const Chat = ({ user }) => {
 
-    const [meetingId, setMeetingId] = useState('');
+    const [meetingId, setMeetingId] = useState('temp');
 
     const [userDoc, userLoading, userError] = useDocument(
         db.collection('users').doc(user.uid)
@@ -14,20 +14,21 @@ const Chat = ({ user }) => {
 
     useEffect(() => {
         if (!!userDoc) {
+            console.log("egg");
             setMeetingId(userDoc.data()['currentMeeting']);
         }
     }, [userDoc])
 
-    if (meetingId !== '') {
-        return <ChatBox user={user} meetingId={meetingId} />;
+    if (userLoading || meetingId === "temp") {
+        return <div/>
     }
+
     return (
-        <Redirect to="/match" />
+        <>
+        {meetingId === '' ?  <Redirect to="/match" /> : <ChatBox user={user} meetingId={meetingId} /> }
+        </>
     );
 
-    // return (
-    //     {meetingId !== '' ? <ChatBox user={user} meetingId={meetingId} /> : <></>}
-    // )
 }
 
 export default Chat;
