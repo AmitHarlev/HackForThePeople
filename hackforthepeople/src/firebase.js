@@ -39,12 +39,17 @@ export const setUserOpinions = (opinions) => {
 // Takes the user the request was sent to as argument
 export const sendConversationRequest = ({id, data, topic}) => {
   const user = getCurrentUser();
-  db.collection('users').doc(id).update({
-    requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic}),
-  });
-  db.collection('users').doc(user.uid).update({
-    requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic}),
-  });
+  const usersRef = db.collection("users");
+  usersRef.doc(user.uid).get().then(doc => {
+    const user_topic_value = doc.data()[topic];
+    usersRef.doc(id).update({
+      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value}),
+    });
+    usersRef.doc(user.uid).update({
+      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic]}),
+    });
+  })
+  
 }
 
 export const signInWithGoogle = () => {

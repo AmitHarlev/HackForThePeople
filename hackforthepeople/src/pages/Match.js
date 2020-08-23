@@ -1,6 +1,6 @@
 import React from 'react'
 import Matcher from './../components/Matcher';
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 import { db } from './../firebase';
 
