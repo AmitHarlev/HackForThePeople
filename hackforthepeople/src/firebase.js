@@ -148,47 +148,34 @@ export const addChatMessage = (meetingId, timestamp, chatMessage) => {
         "timestamp": timestamp, // or firebase.firestore.FieldValue.serverTimestamp()
         "uid": user.uid
     };
-  console.log(message);
   db.collection('meetings').doc(meetingId).update({
     messages: firebase.firestore.FieldValue.arrayUnion(message)
   });
 }
 
-export const addChatRating = (meetingId, chatRating) => {
+export const addChatRating = (otherUserId, meetingId, chatRating) => {
   const user = getCurrentUser();
   const rating =
     {
         "rating": chatRating,
         "uid": user.uid
     };
+  console.log(chatRating, user.uid, otherUserId, meetingId);
+  // TODO: not working?
+  db.collection('meetings').doc(meetingId).update({
+    ratings: firebase.firestore.FieldValue.arrayUnion(rating)
+  });
+  // TODO: remove previous entry if exists
+  db.collection('users').doc(otherUserId).update({
+    ratings: firebase.firestore.FieldValue.arrayUnion(rating)
+  })
+}
 
-  // const usersRef = db.collection('users').get(user.uid);
-  // const meetingsRef = db.collection('meetings').get(meetingId);
+export const endCurrentMeeting = (meetingId) => {
+  const user = getCurrentUser();
 
-  // usersRef.doc(user.uid).get()
-  // .then(
-  //   (doc) => {
-  //     if (!doc.exists) {
-  //       usersRef.doc(user.uid).set({
-  //         name: user.displayName,
-  //         ratings: [{
-  //           uid: "Ilona Kariko",
-  //           rating: 1
-  //         }, {
-  //           uid: "Ingrid Tsang",
-  //           rating: 4
-  //         }]
-  //       })
-  //     }
-  //   }
-  // )
-  // .catch(
-  //   (err) => {
-  //     console.log("error: " + err);
-  //   }
-  // );
-  
-  // db.collection('meetings').doc(meetingId).update({
-  //   ratings: firebase.firestore.FieldValue.arrayUnion(message)
-  // });
+  db.collection('users').doc(user.uid).update({
+    currentMeeting: ''
+  });
+
 }
