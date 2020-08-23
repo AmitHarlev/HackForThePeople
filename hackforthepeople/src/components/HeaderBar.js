@@ -20,7 +20,7 @@ const HeaderBar = (props) => {
             <Navbar.Collapse className="justify-content-end">
                 
                 <Navbar.Text>
-                    {!user ? <Button variant="outline-info" onClick={signInWithGoogle}>Log In with Google</Button>: <span>Signed in as: <a href="#login">{user.displayName}</a> <Button variant="outline-info" onClick={signOut}>Sign out</Button></span>}
+                    {!user ? <Button variant="outline-info" onClick={signInWithGoogle}>Log In with Google</Button>: <span>Signed in as: <a>{user.displayName}</a> <Button variant="outline-info" onClick={signOut}>Sign out</Button></span>}
                 </Navbar.Text>
             </Navbar.Collapse>
         </Navbar>
