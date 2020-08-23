@@ -37,7 +37,7 @@ const InBoundRequests = ({ user }) => {
                     <ul className="request-list">
                     {
                     userDoc.data().requests.map((request) => {
-                    return <li>
+                    return <li className="request-item">
                         {request.name + " (" + request.topic + ": " + request.value + ") - " + request.rating + " stars"}
                         {request.state === 1 ? <Button onClick={() => history.push('/chat')}>Join Chat</Button> : <>
                         <Button onClick={() => ignoreRequest(request)} className="button-request"> Ignore Request </Button>
