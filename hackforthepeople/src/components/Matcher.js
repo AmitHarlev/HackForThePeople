@@ -94,7 +94,7 @@ const Matcher = ({user}) => {
                     <>
                         <ul className="match-list">
                             { matches.map((match) => {
-                            return <li key={match.id}>{match.data["name"] + " (" + match.topic + ": " + match.data[match.topic] + ") - Rating: " + match.data["rating"]} <Button disabled={match.disabled} onClick={() => {sendRequest(match)}}>Send Conversation Request</Button></li>
+                            return <li key={match.id}>{match.data["name"] + " (" + match.topic + ": " + match.data[match.topic] + ") - Rating: " + match.data["rating"]} <Button className="button-request" disabled={match.disabled} onClick={() => {sendRequest(match)}}>Send Conversation Request</Button></li>
                             }) }
                         </ul>
                     </>
