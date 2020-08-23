@@ -36,20 +36,56 @@ export const setUserOpinions = (opinions) => {
   db.collection('users').doc(user.uid).update(opinions_and_completed_survey_bool)
 }
 
-// Takes the user the request was sent to as argument
 export const sendConversationRequest = ({id, data, topic}) => {
   const user = getCurrentUser();
   const usersRef = db.collection("users");
   usersRef.doc(user.uid).get().then(doc => {
     const user_topic_value = doc.data()[topic];
     usersRef.doc(id).update({
-      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value}),
+      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value, state:0}),
     });
     usersRef.doc(user.uid).update({
-      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic]}),
+      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic], state:0}),
     });
+  }) 
+}
+
+export const cancelOutBoundRequest = (request) => {
+  const user = getCurrentUser();
+  const usersRef = db.collection("users");
+  usersRef.doc(user.uid).update({
+    requestsSent: firebase.firestore.FieldValue.arrayRemove(request)
+  });
+  const otherUserID = request.user;
+  usersRef.doc(otherUserID).get().then(doc => {
+    for (const req of doc.data().requests) {
+      if (req.user === user.uid && req.topic === request.topic) {
+        usersRef.doc(otherUserID).update({
+          requests: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+      }
+    }
   })
-  
+}
+
+export const ignoreInboundRequest = (request) => {
+  const user = getCurrentUser();
+  const usersRef = db.collection("users");
+  usersRef.doc(user.uid).update({
+    requests: firebase.firestore.FieldValue.arrayRemove(request)
+  });
+  const otherUserID = request.user;
+  usersRef.doc(otherUserID).get().then(doc => {
+    console.log(doc.data());
+    for (const req of doc.data().requestsSent) {
+      console.log(req);
+      if (req.user === user.uid && req.topic === request.topic) {
+        usersRef.doc(otherUserID).update({
+          requestsSent: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+      }
+    }
+  })
 }
 
 export const signInWithGoogle = () => {
