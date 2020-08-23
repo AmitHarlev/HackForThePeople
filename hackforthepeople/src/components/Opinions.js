@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import { setUserOpinions, db } from './../firebase';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
@@ -24,6 +25,8 @@ const Opinions = (props) => {
     const gunControlSliderInput = React.createRef(); 
     const abortionSliderInput = React.createRef(); 
 
+    let history = useHistory();
+
     const setUserOpinionsEvent = () => {
         const opinions =
             {
@@ -31,6 +34,7 @@ const Opinions = (props) => {
                 "Abortion": abortion
             };
         setUserOpinions(opinions);
+        history.push('/matches');
     }
 
     return (
