@@ -37,13 +37,13 @@ export const setUserOpinions = (opinions) => {
 }
 
 // Takes the user the request was sent to as argument
-export const sendConversationRequest = ({id, data}) => {
+export const sendConversationRequest = ({id, data, topic}) => {
   const user = getCurrentUser();
   db.collection('users').doc(id).update({
-    requests: firebase.firestore.FieldValue.arrayUnion(user.uid),
+    requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic}),
   });
   db.collection('users').doc(user.uid).update({
-    requestsSent: firebase.firestore.FieldValue.arrayUnion(id),
+    requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic}),
   });
 }
 

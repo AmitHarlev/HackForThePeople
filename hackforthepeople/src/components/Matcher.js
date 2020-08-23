@@ -26,7 +26,8 @@ const Matcher = ({user}) => {
                 if (doc.id !== user.uid) {
                     matchesFound.push({
                         id: doc.id,
-                        data: doc.data()
+                        data: doc.data(),
+                        topic: topicRef.current.value,
                     })
                 }
             });
