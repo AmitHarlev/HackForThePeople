@@ -1,10 +1,19 @@
-import React from 'react'
-import { Navbar, Nav, Button } from 'react-bootstrap';
-import { signInWithGoogle, signOut} from '../firebase'
+import React, { useState, useEffect } from 'react'
+import { Navbar, Nav, Button, NavDropdown } from 'react-bootstrap';
+import { signInWithGoogle, signOut } from '../firebase'
 import './../index.css';
 
 const HeaderBar = (props) => {
     const { user } = props;
+    const [show, setShow] = useState(false);
+
+    const showDropdown = () => {
+        setShow(!show);
+    }
+
+    const hideDropdown = () => {
+        setShow(false);
+    }
 
     return (
         <Navbar>
@@ -15,7 +24,16 @@ const HeaderBar = (props) => {
             <Nav className="mr-auto">
                 <Nav.Link href="/survey">Opinions</Nav.Link>
                 <Nav.Link href="/match">Match</Nav.Link>
-                <Nav.Link href="/requests">Inbox</Nav.Link>
+                <NavDropdown title="Inbox" 
+                    id="collasible-nav-dropdown" 
+                    show={show}
+                    onMouseEnter={showDropdown} 
+                    onMouseLeave={hideDropdown}
+                >
+                    <NavDropdown.Item className="dropdown-item" href="/requests-inbound">Inbound</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className="dropdown-item" href="/requests-outbound">Outbound</NavDropdown.Item>
+                </NavDropdown>
                 <Nav.Link href="/resources">Resources</Nav.Link>
             </Nav>
             }

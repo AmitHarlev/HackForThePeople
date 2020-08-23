@@ -22,6 +22,10 @@ code {
   margin-right: 20px;
 }
 
+.nav-item:hover .dropdown-menu {
+  display:block!important
+}
+
 .button {
   color: #17b87e !important; 
   border-color: #17b87e !important;
