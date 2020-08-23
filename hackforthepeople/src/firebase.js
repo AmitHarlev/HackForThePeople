@@ -130,16 +130,6 @@ export const signInWithGoogle = () => {
   });
 };
 
-export const signOut = () => {
-  // TODO: catch promise
-  auth.signOut();
-}
-
-export const setUserOpinions = (opinions) => {
-  const user = getCurrentUser();
-  db.collection('users').doc(user.uid).update(opinions)
-}
-
 export const addChatMessage = (meetingId, timestamp, chatMessage) => {
   const user = getCurrentUser();
   const message =
