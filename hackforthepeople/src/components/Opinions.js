@@ -14,16 +14,19 @@ const Opinions = (props) => {
 
     const [abortion, setAbortion] = useState(50);
     const [gunControl, setGunControl] = useState(50);
+    const [healthcare, setHealthcare] = useState(50);
 
     useEffect(() => {
         if (!!userDoc) {
             setAbortion(userDoc.data()['Abortion'] || abortion);
-            setGunControl(userDoc.data()['Gun Control'] || gunControl)
+            setGunControl(userDoc.data()['Gun Control'] || gunControl);
+            setHealthcare(userDoc.data()['Universal Healthcare'] || healthcare);
         }
     }, [userDoc])
 
     const gunControlSliderInput = React.createRef(); 
-    const abortionSliderInput = React.createRef(); 
+    const abortionSliderInput = React.createRef();
+    const healthcareSliderInput = React.createRef();
 
     let history = useHistory();
 
@@ -31,7 +34,8 @@ const Opinions = (props) => {
         const opinions =
             {
                 "Gun Control": gunControl,
-                "Abortion": abortion
+                "Abortion": abortion,
+                "Universal Healthcare": healthcare,
             };
         setUserOpinions(opinions);
         history.push('/match');
@@ -47,6 +51,10 @@ const Opinions = (props) => {
         <Form.Group controlId="abortionGroup">
             <Form.Label>Abortion</Form.Label>
             <Form.Control ref={abortionSliderInput} value={abortion} onChange={() => {setAbortion(abortionSliderInput.current.value)}} type="range" />
+        </Form.Group>
+        <Form.Group controlId="healthcareGroup">
+            <Form.Label>Universal Health Care</Form.Label>
+            <Form.Control ref={healthcareSliderInput} value={healthcare} onChange={() => {setHealthcare(healthcareSliderInput.current.value)}} type="range" />
         </Form.Group>
         <Button onClick={setUserOpinionsEvent} variant="primary">
             Submit

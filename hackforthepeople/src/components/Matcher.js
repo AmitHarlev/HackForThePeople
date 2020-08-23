@@ -48,6 +48,7 @@ const Matcher = ({user}) => {
                 <Form.Control ref={topicRef} as="select" custom>
                     <option>Gun Control</option>
                     <option>Abortion</option>
+                    <option>Universal Healthcare</option>
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="range">
