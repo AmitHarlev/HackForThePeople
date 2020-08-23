@@ -134,7 +134,7 @@ Popup.registerPlugin('prompt', function (otherUserId, meetingId, history) {
                                 action: function () {
                                     endCurrentMeeting(meetingId);
                                     Popup.close();
-                                    history.push('/matches');
+                                    history.push('/match');
                                 }
                             }]
                         }

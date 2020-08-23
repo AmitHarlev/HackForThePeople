@@ -22,7 +22,7 @@ const Chat = ({ user }) => {
         return <ChatBox user={user} meetingId={meetingId} />;
     }
     return (
-        <Redirect to="/matches" />
+        <Redirect to="/match" />
     );
 
     // return (

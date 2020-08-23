@@ -34,7 +34,7 @@ const Opinions = (props) => {
                 "Abortion": abortion
             };
         setUserOpinions(opinions);
-        history.push('/matches');
+        history.push('/match');
     }
 
     return (
