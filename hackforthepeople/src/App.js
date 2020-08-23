@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import Chat from './pages/Chat';
 import Survey from './pages/Survey';
 import Match from './pages/Match';
+import InBoundRequests from './components/InBoundRequests';
+import Requests from './pages/Requests';
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
@@ -32,6 +34,7 @@ function App() {
           <PrivateRoute path="/survey" user={user} loading={loading} component={Survey} />
           <PrivateRoute path="/match" user={user} loading={loading} component={Match} />
           <PrivateRoute path="/chat" user={user} loading={loading} component={Chat} />
+          <PrivateRoute path="/requests" user={user} component={Requests} />
         </Switch>
       </Router>
     </div>
