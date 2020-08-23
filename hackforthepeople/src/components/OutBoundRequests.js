@@ -31,8 +31,8 @@ const OutBoundRequests = ({user}) => {
                     {
                         userDoc.data().requestsSent.map((request) => {
                             return <li>
-                                {JSON.stringify(request)}
-                                {request.state === 1 ? <Button onClick={() => history.push('/chat')} className="button-request">Join Chat</Button>: <Button onClick={() => cancelRequest(request)} className="button-request"> Cancel Request </Button>}
+                                {request.name + " (" + request.topic + ": " + request.value + ") - " + request.rating + " stars"}
+                                {request.state === 1 ? <Button onClick={() => history.push('/chat')}>Join Chat</Button>: <Button onClick={() => cancelRequest(request)}> Cancel Request </Button>}
                             </li>
                         })
                     }
