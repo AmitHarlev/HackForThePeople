@@ -73,7 +73,7 @@ const ChatBox = ({ user, meetingId }) => {
 
     const handleEnd = () => {
         Popup.plugins().prompt(otherUserId, meetingId, history);
-        // endCurrentMeeting(meetingId);
+        // endCurrentMeeting(meetingId, otherUserId);
     }
 
     return (
@@ -150,7 +150,7 @@ Popup.registerPlugin('prompt', function (otherUserId, meetingId, history) {
                                 action: function () {
                                     endCurrentMeeting(meetingId);
                                     Popup.close();
-                                    history.push('/match');
+                                    history.push('/');
                                 }
                             }]
                         }
