@@ -33,7 +33,12 @@ const InBoundRequests = ({ user }) => {
             <ul>
             {
                 userDoc.data().requests.map((request) => {
-                return <li>{JSON.stringify(request)} <Button onClick={() => ignoreRequest(request)}> Ignore Request </Button><Button onClick={() => acceptRequest(request)}> Accept Request </Button></li>
+                return <li>
+                        {JSON.stringify(request)}
+                        {request.state === 1 ? <Button onClick={() => history.push('/chat')}>Join Chat</Button> : <>
+                        <Button onClick={() => ignoreRequest(request)}> Ignore Request </Button>
+                        <Button onClick={() => acceptRequest(request)}> Accept Request </Button> </>}
+                    </li>
                 })
             }
             </ul>
