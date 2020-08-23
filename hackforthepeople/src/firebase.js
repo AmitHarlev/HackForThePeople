@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCeHaINilUoapZQrDfQP4SI-guU1QrFcdY",
@@ -81,9 +82,7 @@ export const ignoreInboundRequest = (request) => {
   });
   const otherUserID = request.user;
   usersRef.doc(otherUserID).get().then(doc => {
-    console.log(doc.data());
     for (const req of doc.data().requestsSent) {
-      console.log(req);
       if (req.user === user.uid && req.topic === request.topic) {
         usersRef.doc(otherUserID).update({
           requestsSent: firebase.firestore.FieldValue.arrayRemove(req)
@@ -91,6 +90,47 @@ export const ignoreInboundRequest = (request) => {
       }
     }
   })
+}
+
+export const acceptIncomingRequest = (request) => {
+  const user = getCurrentUser();
+  const usersRef = db.collection("users");
+  db.collection("meetings").add({
+    messages:[],
+    ratings:[]
+  }).then(docRef => {
+    const newMeetingID = docRef.id;
+    usersRef.doc(user.uid).update({
+      currentMeeting: newMeetingID
+    });
+    const otherUserID = request.user;
+    usersRef.doc(otherUserID).update({
+      currentMeeting: newMeetingID
+    });
+    usersRef.doc(user.uid).update({
+      requests: firebase.firestore.FieldValue.arrayRemove(request)
+    });
+    let newRequest = request;
+    newRequest.state = 1;
+    usersRef.doc(user.uid).update({
+      requests: firebase.firestore.FieldValue.arrayUnion(newRequest)
+    });
+    usersRef.doc(otherUserID).get().then(doc => {
+      for (const req of doc.data().requestsSent) {
+        if (req.user === user.uid && req.topic === request.topic) {
+          usersRef.doc(otherUserID).update({
+            requestsSent: firebase.firestore.FieldValue.arrayRemove(req)
+          });
+          let newReq = req;
+          newReq.state = 1;
+          usersRef.doc(otherUserID).update({
+            requestsSent: firebase.firestore.FieldValue.arrayUnion(newReq)
+          });
+        }
+      }
+    })
+  })
+  
 }
 
 export const signInWithGoogle = () => {
@@ -108,6 +148,7 @@ export const signInWithGoogle = () => {
               completedSurvey: false,
               requests:[],
               requestsSent:[],
+              currentMeeting: '',
               ratings: [{
                 uid: "Ilona Kariko",
                 rating: 1
@@ -150,7 +191,6 @@ export const addChatRating = (otherUserId, meetingId, chatRating) => {
         "rating": chatRating,
         "uid": user.uid
     };
-  console.log(chatRating, user.uid, otherUserId, meetingId);
   // TODO: not working?
   db.collection('meetings').doc(meetingId).update({
     ratings: firebase.firestore.FieldValue.arrayUnion(rating)
