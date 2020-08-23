@@ -1,16 +1,17 @@
 import React from 'react';
+
 import './App.css';
 import HeaderBar from './components/HeaderBar';
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
+
 import { PrivateRoute } from './components/Routes';
 import Home from './pages/Home';
-import Chat from './pages/Chat';
 import Survey from './pages/Survey';
 import Match from './pages/Match';
-import InBoundRequests from './components/InBoundRequests';
 import Requests from './pages/Requests';
+import Chat from './pages/Chat';
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
@@ -20,7 +21,6 @@ function App() {
   }
   
   return (
-
     <div>
       <HeaderBar user={user} />
       

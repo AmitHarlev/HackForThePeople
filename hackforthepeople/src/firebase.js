@@ -18,6 +18,11 @@ const provider = new firebase.auth.GoogleAuthProvider();
 export const db = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
 
+// TODO: do we need this?
+// db.settings({
+//   timestampsInSnapshots: true
+// });
+
 export const getCurrentUser = () => {
   return auth.currentUser;
 }
@@ -36,20 +41,56 @@ export const setUserOpinions = (opinions) => {
   db.collection('users').doc(user.uid).update(opinions_and_completed_survey_bool)
 }
 
-// Takes the user the request was sent to as argument
 export const sendConversationRequest = ({id, data, topic}) => {
   const user = getCurrentUser();
   const usersRef = db.collection("users");
   usersRef.doc(user.uid).get().then(doc => {
     const user_topic_value = doc.data()[topic];
     usersRef.doc(id).update({
-      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value}),
+      requests: firebase.firestore.FieldValue.arrayUnion({"user":user.uid, "topic":topic, "value": user_topic_value, state:0}),
     });
     usersRef.doc(user.uid).update({
-      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic]}),
+      requestsSent: firebase.firestore.FieldValue.arrayUnion({"user":id, "topic":topic, "value":data[topic], state:0}),
     });
+  }) 
+}
+
+export const cancelOutBoundRequest = (request) => {
+  const user = getCurrentUser();
+  const usersRef = db.collection("users");
+  usersRef.doc(user.uid).update({
+    requestsSent: firebase.firestore.FieldValue.arrayRemove(request)
+  });
+  const otherUserID = request.user;
+  usersRef.doc(otherUserID).get().then(doc => {
+    for (const req of doc.data().requests) {
+      if (req.user === user.uid && req.topic === request.topic) {
+        usersRef.doc(otherUserID).update({
+          requests: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+      }
+    }
   })
-  
+}
+
+export const ignoreInboundRequest = (request) => {
+  const user = getCurrentUser();
+  const usersRef = db.collection("users");
+  usersRef.doc(user.uid).update({
+    requests: firebase.firestore.FieldValue.arrayRemove(request)
+  });
+  const otherUserID = request.user;
+  usersRef.doc(otherUserID).get().then(doc => {
+    console.log(doc.data());
+    for (const req of doc.data().requestsSent) {
+      console.log(req);
+      if (req.user === user.uid && req.topic === request.topic) {
+        usersRef.doc(otherUserID).update({
+          requestsSent: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+      }
+    }
+  })
 }
 
 export const signInWithGoogle = () => {
@@ -80,7 +121,7 @@ export const signInWithGoogle = () => {
       )
       .catch(
         (err) => {
-          console.log("error: "+ err);
+          console.log("error: " + err);
         }
       )
 
@@ -88,3 +129,43 @@ export const signInWithGoogle = () => {
     console.log(error.message)
   });
 };
+
+export const addChatMessage = (meetingId, timestamp, chatMessage) => {
+  const user = getCurrentUser();
+  const message =
+    {
+        "message": chatMessage,
+        "timestamp": timestamp, // or firebase.firestore.FieldValue.serverTimestamp()
+        "uid": user.uid
+    };
+  db.collection('meetings').doc(meetingId).update({
+    messages: firebase.firestore.FieldValue.arrayUnion(message)
+  });
+}
+
+export const addChatRating = (otherUserId, meetingId, chatRating) => {
+  const user = getCurrentUser();
+  const rating =
+    {
+        "rating": chatRating,
+        "uid": user.uid
+    };
+  console.log(chatRating, user.uid, otherUserId, meetingId);
+  // TODO: not working?
+  db.collection('meetings').doc(meetingId).update({
+    ratings: firebase.firestore.FieldValue.arrayUnion(rating)
+  });
+  // TODO: remove previous entry if exists
+  db.collection('users').doc(otherUserId).update({
+    ratings: firebase.firestore.FieldValue.arrayUnion(rating)
+  })
+}
+
+export const endCurrentMeeting = (meetingId) => {
+  const user = getCurrentUser();
+
+  db.collection('users').doc(user.uid).update({
+    currentMeeting: ''
+  });
+
+}

@@ -1,31 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useDocumentOnce, useDocument } from 'react-firebase-hooks/firestore';
-import { addChatMessage, db, addChatRating } from './../firebase';
+import { useHistory } from 'react-router-dom';
+import { useDocument } from 'react-firebase-hooks/firestore';
+import Popup from 'react-popup';
+import Rating from 'react-rating';
+import { addChatMessage, db, endCurrentMeeting, addChatRating } from './../firebase';
 import './ChatBox.css';
-import { Form, Button } from 'react-bootstrap';
+import './Popup.css';
 
-const ChatBox = ({ user }) => {
+const ChatBox = ({ user, meetingId }) => {
 
-    const [meetingId, setMeetingId] = useState('');
+    const [otherUserId, setOtherUserId] = useState([]);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
     const chatRef = React.createRef();
 
-    const [userDoc, userLoading, userError] = useDocumentOnce(
-        db.collection('users').doc(user.uid)
-    );
-
-    useEffect(() => {
-        if (!!userDoc) {
-            setMeetingId(userDoc.data()['currentMeeting']);
-        }
-    }, [userDoc])
-
-    // TODO: change to meetingId
-    // TODO: update immediately
-    const [meetingDoc, meetingLoading, meetingError] = useDocument(
-        db.collection('meetings').doc("hApVQp4xLfKbmuoP20Py")
+    const [meetingDoc] = useDocument(
+        db.collection('meetings').doc(meetingId)
     );
 
     useEffect(() => {
@@ -35,23 +26,38 @@ const ChatBox = ({ user }) => {
                 msgs.push(msg);
             });
             setMessages(msgs);
+
+            meetingDoc.data()['ratings'].forEach((rating) => {
+                if (rating["uid"] !== user.uid) {
+                    setOtherUserId(rating["uid"]);
+                }
+            })
         }
     }, [meetingDoc]);
+
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        const time = `${date.getHours()}:` + `${date.getMinutes()}`.padStart(2, '0');
+        return `${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()} ${time}`;
+    }
 
     const handleChange = (event) => {
         setNewMessage(event.target.value);
     }
 
     const handleSendMsg = (event) => {
+        const chatArea = chatRef.current;
         event.preventDefault();
         addChatMessage(meetingId, Date.now(), newMessage);
         setNewMessage('');
+        chatArea.scrollBy(0, chatArea.innerHeight); // TODO: not working
     }
 
-    const formatTime = (timestamp) => {
-        const date = new Date(timestamp);
-        const time = `${date.getHours()}:` + `${date.getMinutes()}`.padStart(2, '0');
-        return `${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()} ${time}`;
+    let history = useHistory();
+
+    const handleEnd = () => {
+        Popup.plugins().prompt(otherUserId, meetingId, history);
+        // endCurrentMeeting(meetingId);
     }
 
     return (
@@ -66,12 +72,76 @@ const ChatBox = ({ user }) => {
                 })}
             </div>
 
-            <Form onSubmit={handleSendMsg}>
+            <form onSubmit={handleSendMsg}>
                 <input onChange={handleChange} value={newMessage}></input>
-                <Button type="Send">Send</Button>
-            </Form>
+                <button className="btn btn-primary">Send</button>
+            </form>
+
+            <button className="btn btn-secondary" onClick={handleEnd}>End Session</button>
+            <Popup />
         </div>
     );
 }
 
 export default ChatBox;
+
+
+const Prompt = ({ otherUserId, meetingId }) => {
+
+    const handleRatingChange = (value) => {
+        addChatRating(otherUserId, meetingId, value);
+    }
+
+    return <>
+        <p>Please rate how your interaction went. How productive was the conversation and was the other person respectful?</p>
+        <br />
+        <Rating start={0} stop={5} initialRating={0} onChange={handleRatingChange} />
+    </>;
+}
+
+/** Prompt plugin */
+Popup.registerPlugin('prompt', function (otherUserId, meetingId, history) {
+    let promptValue = null;
+    let promptChange = function (value) {
+        promptValue = value;
+    };
+
+    this.create({
+        title: null,
+        content: "Are you sure you want to end your session?",
+        buttons: {
+            left: [{
+                text: 'Back',
+                action: function () {
+                    Popup.close();
+                }
+            }],
+            right: [{
+                text: 'Continue',
+                key: 'enter',
+                className: 'success',
+                action: function () {
+                    Popup.close();
+                    Popup.create({
+                        title: null,
+                        content: <Prompt onChange={promptChange} otherUserId={otherUserId} meetingId={meetingId} />,
+                        buttons: {
+                            left: [],
+                            right: [{
+                                text: 'Continue',
+                                key: 'enter',
+                                className: 'success',
+                                action: function () {
+                                    endCurrentMeeting(meetingId);
+                                    Popup.close();
+                                    history.push('/match');
+                                }
+                            }]
+                        }
+                        
+                    })
+                }
+            }]
+        }
+    });
+});
