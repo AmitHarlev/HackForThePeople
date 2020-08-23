@@ -12,27 +12,32 @@ const Matcher = ({user}) => {
     );
 
     const topicRef = React.createRef();
-    const lowerBoundRef = React.createRef();
-    const upperBoundRef = React.createRef();
+    const rangeCenterRef = React.createRef();
+    const radiusRef = React.createRef();
 
-    const [lowerBound, setLowerBound] = useState(0);
-    const [upperBound, setUpperBound] = useState(100);
+    const [rangeCenter, setRangeCenter] = useState(50);
+    const [searchedForMatches, setSearchedForMatches] = useState(false);
 
     const findMatches = () => {
-        const matchedUsers = db.collection('users').where(topicRef.current.value, '>=', lowerBound).where(topicRef.current.value, '<=', upperBound);
+        const radius = parseInt(radiusRef.current.value);
+        const matchedUsers = db.collection('users').where(topicRef.current.value, '>=', rangeCenter-radius).where(topicRef.current.value, '<=', rangeCenter+radius);
+        const topic = topicRef.current.value;
         matchedUsers.get().then(function(querySnapshot) {
             const matchesFound=[];
+            debugger;
+            console.log(radius);
             querySnapshot.forEach(function(doc) {
                 if (doc.id !== user.uid) {
                     matchesFound.push({
                         id: doc.id,
                         data: doc.data(),
-                        topic: topicRef.current.value,
+                        topic: topic,
                     })
                 }
             });
             setMatches(matchesFound);
         });
+        setSearchedForMatches(true);
     }
 
     const sendRequest = (selectedUser) => {
@@ -42,6 +47,7 @@ const Matcher = ({user}) => {
     return (
         <>
         {matches.length===0 ?
+        <>
         <Form>
             <Form.Group controlId="topic">
                 <Form.Label>Topic to Match On</Form.Label>
@@ -51,16 +57,25 @@ const Matcher = ({user}) => {
                     <option>Universal Healthcare</option>
                 </Form.Control>
             </Form.Group>
-            <Form.Group controlId="range">
+            <Form.Group controlId="center">
                 <Form.Label>Range</Form.Label>
-                <Form.Control ref={lowerBoundRef} value={lowerBound} onChange={() => {setLowerBound(lowerBoundRef.current.value)}} type="range" />
-                <Form.Control ref={upperBoundRef} value={upperBound} onChange={() => {setUpperBound(upperBoundRef.current.value)}} type="range" />
+                <Form.Control ref={rangeCenterRef} value={rangeCenter} onChange={() => {setRangeCenter(rangeCenterRef.current.value)}} type="range" />
+            </Form.Group>
+            <Form.Group controlId="radius">
+                <Form.Label>Range Radius</Form.Label>
+                <Form.Control ref={radiusRef} as="select" custom>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                </Form.Control>
             </Form.Group>
                 
             <Button onClick={findMatches} variant="primary">
                 Match!
             </Button>
         </Form>
+        {searchedForMatches ? <h2>No matches found! Try a different range.</h2> : <div/>}
+        </>
         :
         <>
             <h2>Matches</h2>

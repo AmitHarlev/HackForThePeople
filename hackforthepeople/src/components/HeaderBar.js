@@ -15,6 +15,7 @@ const HeaderBar = (props) => {
                 <Nav.Link href="/survey">Opinions</Nav.Link>
                 <Nav.Link href="/match">Match</Nav.Link>
                 <Nav.Link href="/requests">Inbox</Nav.Link>
+                <Nav.Link href="/resources">Resources</Nav.Link>
             </Nav>
             }
             <Navbar.Collapse className="justify-content-end">
