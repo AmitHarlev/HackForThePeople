@@ -1,6 +1,9 @@
 # PoliTalks | HackForThePeople Hackathon Project
 Amit Harlev, Ingrid Tsang
 
+## Demo Video
+[Link to our demo video](https://youtu.be/76SXJaIzYEs)
+
 ## Inspiration
 Recently I went on a hike with a friend of mine that I hadn't seen in over a year and we ended up chatting about politics. After a while, we realized that we were both hesitant to say what we believed due to past experiences where others got mad at us for having different opinions and beliefs then them. After realizing this, we both opened up and had a great discussion--disagreement stopped being a problem and became an opportunity to try thinking from a new perspective instead!
 
